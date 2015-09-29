@@ -6,6 +6,7 @@
           s3_scheme="https://"::string(),
           s3_host="s3.amazonaws.com"::string(),
           s3_port=80::non_neg_integer(),
+          s3_bucket_after_host=false::boolean(),
           sdb_host="sdb.amazonaws.com"::string(),
           elb_host="elasticloadbalancing.amazonaws.com"::string(),
           ses_host="email.us-east-1.amazonaws.com"::string(),
@@ -22,6 +23,9 @@
           ddb_host="dynamodb.us-east-1.amazonaws.com"::string(),
           ddb_port=80::non_neg_integer(),
           ddb_retry=fun erlcloud_ddb_impl:retry/1::erlcloud_ddb_impl:retry_fun(),
+          ddb_streams_scheme="https://"::string(),
+          ddb_streams_host="streams.dynamodb.us-east-1.amazonaws.com"::string(),
+          ddb_streams_port=80::non_neg_integer(),
           kinesis_scheme="https://"::string(),
           kinesis_host="kinesis.us-east-1.amazonaws.com"::string(),
           kinesis_port=80::non_neg_integer(),
@@ -34,8 +38,8 @@
           security_token=undefined::string()|undefined,
           timeout=10000::timeout(),
           cloudtrail_raw_result=false::boolean(),
-          http_client=lhttpc::erlcloud_httpc:request_fun(),
-
+          http_client=lhttpc::erlcloud_httpc:request_fun(), %% If using hackney, ensure that it is started.
+          hackney_pool=default::atom(), %% The name of the http request pool hackney should use.
           %% Default to not retry failures (for backwards compatability).
           %% Recommended to be set to default_retry to provide recommended retry behavior.
           %% Currently only affects S3, but intent is to change other services to use this as well.
@@ -67,4 +71,3 @@
           %% Service specific error information
           should_retry :: boolean()
         }).
-
